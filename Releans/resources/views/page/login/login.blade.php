@@ -126,14 +126,19 @@
                 var password = formData.get('password');
 
                 if (!email || !password) {
-                    alert("Please fill out all fields.");
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'Invalid credentials. Please enetr your email and pssword.',
+                        position: 'topRight'
+                    });
                     return;
                 }
 
                 var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
                 formData.append('_token', token);
+                console.log('_token,', token);
 
-                fetch('{{ route('logins') }}', {
+                fetch('http://127.0.0.1:8000/api/login/accessToken', {
                         method: 'POST',
                         body: formData
                     })
@@ -146,15 +151,24 @@
                     .then(data => {
                         localStorage.setItem('access_token', data.token);
                         console.log('access_token', data.token);
-                        window.location.href = 'http://127.0.0.1:8000/';
+                        console.log('token', data);
+                        iziToast.success({
+                            title: 'success',
+                            message: 'valid credentials. WELCOME.',
+                            position: 'topRight',
+
+                        })
+                        window.location.href =
+                            'http://127.0.0.1:8000/';
+
                     })
                     .catch(error => {
                         console.error('Error:', error);
 
                         if (error.message === 'Authentication failed') {
                             iziToast.warning({
-                                title: 'warning',
-                                message: 'Invalid credentials. Please check your email and password.',
+                                title: 'Error',
+                                message: 'Invalid credentials. ((Please !)) check your email and password.',
                                 position: 'topRight'
                             });
                         } else {
@@ -168,7 +182,50 @@
             });
         </script>
 
+        {{-- <script>
+            document.getElementById('loginForm').addEventListener('submit', function(event) {
+                event.preventDefault();
 
+                var formData = new FormData(this);
+                var email = formData.get('email');
+                var password = formData.get('password');
+
+                if (!email || !password) {
+                    alert("Please fill out all fields.");
+                    return;
+                }
+
+                var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                formData.append('_token', token);
+
+                fetch('{{ route('logins') }}', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            // Authentication successful
+                            return response.json();
+                        } else {
+                            // Authentication failed
+                            throw new Error('Authentication failed');
+                        }
+                    })
+                    .then(data => {
+                        // Handle additional data if needed
+                        localStorage.setItem('access_token', data.token);
+                        window.location.href = 'http://127.0.0.1:8000/dashboard';
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        iziToast.error({
+                            title: 'Error',
+                            message: 'An error occurred while trying to authenticate. Please try again later.',
+                            position: 'topRight'
+                        });
+                    });
+            });
+        </script> --}}
 
     </body>
 

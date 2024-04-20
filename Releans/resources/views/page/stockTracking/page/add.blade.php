@@ -29,7 +29,8 @@
                                         <div class="form-group">
                                             <label>Product</label>
                                             <select name="product_id" class="form-control" required>
-                                                <option value="" disabled selected>Select Product</option>
+                                                <option value="" disabled selected>Select Product
+                                                </option>
 
                                             </select>
                                         </div>
@@ -39,7 +40,8 @@
                                         <div class="form-group">
                                             <label>Type of Transaqtion</label>
                                             <select name="type" class="form-control" required>
-                                                <option value="" disabled selected>Select option</option>
+                                                <option value="" disabled selected>Select option
+                                                </option>
                                                 <option value="addition">Addition</option>
                                                 <option value="deduction">Deduction</option>
                                             </select>

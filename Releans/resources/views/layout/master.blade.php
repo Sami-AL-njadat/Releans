@@ -50,3 +50,18 @@
             @include('layout.saidbar')
             @yield('content')
             @include('layout.footer')
+            <script type="text/javascript">
+                // Initialize the loading screen
+                window.loading_screen = window.pleaseWait({
+                    logo: "frontend/assets/img/americanexpress.png", // Path to your custom logo image
+                    backgroundColor: '#ffffff', // Background color of the loading screen
+                    loadingHtml: 'Add your custom HTML here' // Custom HTML content for the loading screen
+                });
+            </script>
+
+            <!-- Your content here -->
+
+            <script>
+                // Finish loading (remove the loading screen)
+                window.loading_screen.finish();
+            </script>

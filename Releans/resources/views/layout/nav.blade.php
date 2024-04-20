@@ -1,4 +1,5 @@
-             <div class="navbar-bg"></div>
+             <div class="navbar-bg">
+             </div>
 
              <nav class="navbar navbar-expand-lg main-navbar">
                  <form class="form-inline mr-auto">
@@ -169,7 +170,11 @@
                      <li class="dropdown"><a href="#" data-toggle="dropdown"
                              class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                              <img alt="image" src="assets/img/avatar/avatar-1.png" class="rounded-circle mr-1">
-                             <div class="d-sm-none d-lg-inline-block">Hi, Ujang Maman</div>
+                             <div class="d-sm-none d-lg-inline-block">
+                                 @auth
+                                     Hi, {{ Auth::user()->name }}
+                                 @endauth
+                             </div>
                          </a>
                          <div class="dropdown-menu dropdown-menu-right">
                              <div class="dropdown-title">Logged in 5 min ago</div>
@@ -183,7 +188,7 @@
                                  <i class="fas fa-cog"></i> Settings
                              </a>
                              <div class="dropdown-divider"></div>
-                             <a href="#" class="dropdown-item has-icon text-danger">
+                             <a href="#" id="logout-button" class="dropdown-item has-icon text-danger">
                                  <i class="fas fa-sign-out-alt"></i> Logout
                              </a>
                          </div>
@@ -282,6 +287,7 @@
                              },
                              body: JSON.stringify({}),
                          })
+
                          .then(response => {
                              if (response.status === 200) {
 
@@ -291,4 +297,38 @@
                          })
                          .catch(error => console.error('Error marking all notifications as read:', error));
                  }
+             </script>
+
+             <script>
+                 const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                 document.getElementById('logout-button').addEventListener('click', function(event) {
+                     event.preventDefault();
+
+                     const access_tokens = localStorage.getItem('access_token');
+                     console.log(access_tokens, 'sss');
+                     if (!access_tokens) {
+                         console.error('Access token not found in local storage');
+                         return;
+                     }
+                     const access_token = access_tokens.split('|')[1];
+
+                     fetch(`http://127.0.0.1:8000/api/logout/delete/${access_token}`, {
+                             method: 'DELETE',
+                             headers: {
+                                 'X-CSRF-TOKEN': token
+                             }
+                         })
+                         .then(response => {
+                             if (response.ok) {
+                                 localStorage.clear();
+
+                                 window.location.href = 'http://127.0.0.1:8000/loginPage';
+
+                             } else {
+                                 console.error('Logout failed');
+                             }
+                         })
+                         .catch(error => console.error('Error:', error));
+                 });
              </script>

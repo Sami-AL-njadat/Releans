@@ -23,7 +23,7 @@ use App\Http\Controllers\StockTrackingController;
 
 // require __DIR__ . '/auth.php';
 
-Route::get('/', [DashController::class, 'index'])->name('dashboards');
+Route::get('/', [DashController::class, 'index'])->name('dashboards')->middleware('auth:sanctum');
 
 Route::get('/product', [ProductController::class, 'index'])->name('product.page')->middleware('auth:sanctum');
 Route::get('/productAdd', [ProductController::class, 'addProdcut'])->name('add.product')->middleware('auth:sanctum');
@@ -31,6 +31,6 @@ Route::get('/productEdit', [ProductController::class, 'editProdcut'])->name('edi
 
 route::get('/loginPage', [authController::class, 'index'])->name('login.page');
 
-Route::get('/stock', [StockTrackingController::class, 'index'])->name('stock.page');
+Route::get('/stock', [StockTrackingController::class, 'index'])->name('stock.page')->middleware();
 Route::get('/stockAdd', [StockTrackingController::class, 'add'])->name('add.Track');
 Route::get('/stockEdit', [StockTrackingController::class, 'edit'])->name('edit.Track');

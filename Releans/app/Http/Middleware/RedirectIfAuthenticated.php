@@ -29,6 +29,8 @@ class RedirectIfAuthenticated
         if (Auth::check()) {
             if (Auth::user()->role === 'admin') {
                 return $next($request);
+            } elseif (Auth::user()->role === 'user') {
+                return $next($request);
             }
         }
     }
