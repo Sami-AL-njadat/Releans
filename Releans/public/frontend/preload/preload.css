@@ -1,0 +1,106 @@
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Nunito:wght@300;600&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Nunito", sans-serif;
+}
+
+body {
+    overflow: hidden;
+    background: #0e0e0e;
+}
+
+.preloader__block {
+    z-index: 1001;
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+}
+
+.preloader__block p {
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.preloader__block_loading {
+    content: "";
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    border-top: 2px solid #fff;
+    animation: rotateCircle 0.7s ease-in infinite;
+}
+
+.preloader__block_content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+@keyframes showPre {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes rotateCircle {
+    from {
+        transform: rotate(0turn);
+    }
+
+    to {
+        transform: rotate(1turn);
+    }
+}
+
+@keyframes changeColor {
+    0% {
+        color: #dddddd;
+    }
+
+    50% {
+        color: #b84eff
+    }
+
+    100% {
+        color: #dddddd;
+    }
+}
+
+/* DELETE THIS COMMENT
+.loaded_hiding .preloader__block {
+  transition: 0.3s opacity;
+  opacity: 0;
+}
+
+.loaded .preloader__block {
+  display: none;
+}
+
+/* TITLES */
+
+a {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    font-size: 2.3em;
+    font-weight: bold;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    color: #54FF9F;
+}

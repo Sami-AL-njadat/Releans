@@ -77,7 +77,7 @@
             .then(data => {
                 const product = data.product;
                 console.log(product);
-                const badgeColor = product.status === 'in stock' ? 'success' : 'warning';
+                const badgeColor = product.status === 'in stock' ? 'primary' : 'warning';
 
                 document.getElementById('product-details').innerHTML = `
                          <h5 class="card-title">${product.name}

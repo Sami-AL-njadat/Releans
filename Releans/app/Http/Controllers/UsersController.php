@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -16,6 +18,7 @@ class UsersController extends Controller
     {
         return view('page.users.userPage');
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -62,9 +65,9 @@ class UsersController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store()
     {
-        //
+        return view('page.profile.profile');
     }
 
     /**
@@ -92,10 +95,87 @@ class UsersController extends Controller
 
 
 
-    public function edit(User $users)
+    public function edit(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'string',
+            'email' => 'email|unique:users,email,' . Auth::id(), // Ensure email is unique except for the current user
+            'phone' => 'digits:10',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:25000',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'message' => $validator->errors()->first(),
+            ], 422);
+        }
+
+        $user = Auth::user();
+
+        // Update the user information based on provided data
+        if ($request->has('name')) {
+            $user->name = $request->name;
+        }
+        if ($request->has('email')) {
+            $user->email = $request->email;
+        }
+        if ($request->has('phone')) {
+            $user->phone = $request->phone;
+        }
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = $image->getClientOriginalName();
+            $imagePath = 'frontend/userImage/' . $imageName;
+            $image->move(public_path('frontend/userImage'), $imageName);
+            $user->image = $imagePath;
+        }
+
+        $user->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'User information updated successfully',
+            'user' => $user, // Optionally, you can return the updated user object
+        ], 200);
     }
+
+
+    public function passWord(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'old_password' => 'required|string',
+            'new_password' => 'required|string|min:8',
+            'confirm' => 'required|string|min:8|same:new_password',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'message' => $validator->errors()->first(),
+            ], 422);
+        }
+
+        $user = Auth::user();
+
+        // Check if the old password matches
+        if (!Hash::check($request->old_password, $user->password)) {
+            return response()->json([
+                'status' => 422,
+                'message' => 'The old password is incorrect.',
+            ], 422);
+        }
+
+        // Update the user's password
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Password updated successfully.',
+        ], 200);
+    }
+
 
     /**
      * Update the specified resource in storage.
@@ -117,5 +197,21 @@ class UsersController extends Controller
         $delete->delete();
 
         return response()->json(['message' => 'user  deleted successfully'], 200);
+    }
+
+
+    public function updateRole(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+
+        $request->validate([
+            'role' => ['required', 'in:admin,manager,user'],
+        ]);
+
+        $user->role = $request->input('role');
+        $user->save();
+
+        return response()->json(['status' => 200, 'message' => 'User role updated successfully'], 200);
     }
 }

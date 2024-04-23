@@ -4,15 +4,21 @@
     <div class="loader">
 
     </div>
+
+    @if (session()->has('error'))
+        <script>
+            alert('{{ session('error') }}');
+        </script>
+    @endif
     <!-- Your Blade template -->
-    @if (session('error'))
+    {{-- @if (session('error'))
         <script>
             // Extract the error message from the session data
             var errorMessage = {!! json_encode(session('error')) !!};
 
             alert(errorMessage.error);
         </script>
-    @endif
+    @endif --}}
 
     <div class="main-content">
         <section class="section">

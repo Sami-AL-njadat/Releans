@@ -3,11 +3,36 @@
 
 <head>
     <title>Popular Products Report</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #c4c4c4;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+    </style>
 </head>
 
 <body>
     <h1>Popular Products Report</h1>
-    <table border="3">
+    <table>
         <thead>
             <tr>
                 <th>Product ID</th>

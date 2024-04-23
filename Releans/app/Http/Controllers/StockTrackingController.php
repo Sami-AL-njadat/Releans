@@ -164,7 +164,7 @@ class StockTrackingController extends Controller
 
     public function allTran()
     {
-        $stock = stockTracking::all();
+        $stock = stockTracking::with('product')->get();
 
         if ($stock->isEmpty()) {
             $data = [
@@ -173,24 +173,15 @@ class StockTrackingController extends Controller
             ];
             return response()->json($data, 404);
         } else {
-            $formattedStock = $stock->map(function ($item) {
-                $product = Product::find($item->product_id);
-
-                return [
-                    'product_name' => $product->name,
-                    'quantity' => $product->quantity,
-                ];
-            });
-
             $data = [
                 'status' => 200,
-                'stock' => $stock,
-                'formatted_stock' => $formattedStock,
+                'stock' => $stock->toArray(),
             ];
 
             return response()->json($data, 200);
         }
     }
+
 
 
 

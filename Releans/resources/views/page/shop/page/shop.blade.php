@@ -6,12 +6,12 @@
  !important" class="main-content">
         <section class="section">
 
-            <div class="card p-3">
+            <div class="card  p-3">
 
-                <h1>Card</h1>
-                <h2 class="section-title">Sortable Card</h2>
+                <h1>Shop</h1>
+                <h2 class="section-title  ">Welcome here </h2>
                 <p class="section-lead">
-                    Other cool cards, this one can be sorted.
+                    Enjoy
                 </p>
                 <div id="sortableCard" class="row sortable-card"></div>
 
@@ -31,11 +31,11 @@
             .then(data => {
                 if (data && data.product) {
                     data.product.forEach(product => {
-                        const badgeColor = product.status === 'in stock' ? 'success' : 'warning';
+                        const badgeColor = product.status === 'in stock' ? 'primary ' : 'warning';
 
                         const card = `
                     <div class="col-12 col-md-6 col-lg-3">
-                        <div class="card card-danger shadow p-2"  >
+                        <div class="shadow card    p-2"  >
                             <div class="card-header">
 <img style="border-radius: 120%;
     width: 91px;padding:10px ;
@@ -48,7 +48,7 @@
                                 <p>Price: ${product.price}</p>
                                 <p>Description: ${product.description}</p>
                             </div>
-            ${product.status !== 'out of stock' ? `<a href="{{ route('select.page', ['id' => '']) }}/${product.id}" class="btn btn-success" onclick="selectProduct(${product.id})">Select</a>` : `<button class="btn btn-warning disabled">Out of Stock</button>`}
+            ${product.status !== 'out of stock' ? `<a href="{{ route('select.page', ['id' => '']) }}/${product.id}" class="btn btn-info" onclick="selectProduct(${product.id})">Select</a>` : `<button class="btn btn-warning disabled">Out of Stock</button>`}
                         </div>
                     </div>`;
                         document.getElementById('sortableCard').innerHTML += card;

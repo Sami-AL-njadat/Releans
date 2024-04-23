@@ -13,7 +13,6 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        return view('page.supplier.SuppPage');
     }
 
     /**
@@ -22,34 +21,9 @@ class SupplierController extends Controller
 
     public function addSupplie()
     {
-        return view('page.supplier.supplierPage.add');
     }
     public function create(Request $request)
     {
-        $validator = User::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required',
-         ]);
-
-        if ($validator->fails()) {
-            $data = [
-                'status' => 422,
-                'message' => $validator->messages()
-            ];
-            return response()->json($data, 422);
-        } else {
-            $user = new User;
-            $user->name = $request->name;
-            $user->email = $request->email;
-             $user->save();
-
-            $data = [
-                'status' => 200,
-                'message' => 'Data successfully added'
-            ];
-
-            return response()->json($data);
-        }
     }
 
     /**

@@ -12,25 +12,26 @@
 
                  </form>
                  <ul class="navbar-nav navbar-right">
+                     @if (Auth::user()->role == 'admin' || Auth::user()->role == 'manager')
+                         <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown"
+                                 class="nav-link notification-toggle nav-link-lg beep"><i class="far fa-bell"></i></a>
+                             <div class="dropdown-menu dropdown-list dropdown-menu-right">
+                                 <div class="dropdown-header">Notifications
+                                     <div class="float-right">
+                                         <a style="color: black" href="#" onclick="markAllAsRead()"
+                                             class="nav-link">Mark All As Read</a>
+                                     </div>
+                                 </div>
+                                 <div style="height: auto !important" class="dropdown-list-content dropdown-list-icons">
 
-                     <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown"
-                             class="nav-link notification-toggle nav-link-lg beep"><i class="far fa-bell"></i></a>
-                         <div class="dropdown-menu dropdown-list dropdown-menu-right">
-                             <div class="dropdown-header">Notifications
-                                 <div class="float-right">
-                                     <a style="color: black" href="#" onclick="markAllAsRead()"
-                                         class="nav-link">Mark All As Read</a>
+
+                                 </div>
+                                 <div class="dropdown-footer text-center">
+                                     <a href="#">View All <i class="fas fa-chevron-right"></i></a>
                                  </div>
                              </div>
-                             <div style="height: auto !important" class="dropdown-list-content dropdown-list-icons">
-
-
-                             </div>
-                             <div class="dropdown-footer text-center">
-                                 <a href="#">View All <i class="fas fa-chevron-right"></i></a>
-                             </div>
-                         </div>
-                     </li>
+                         </li>
+                     @endif
                      <li class="dropdown"><a href="#" data-toggle="dropdown"
                              class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                              @auth
@@ -44,8 +45,7 @@
                              </div>
                          </a>
                          <div class="dropdown-menu dropdown-menu-right">
-                             <div class="dropdown-title">Logged in 5 min ago</div>
-                             <a href="features-profile.html" class="dropdown-item has-icon">
+                             <a href="{{ route('Profile.page') }}" class="dropdown-item has-icon">
                                  <i class="far fa-user"></i> Profile
                              </a>
 

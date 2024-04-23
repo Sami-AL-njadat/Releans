@@ -30,8 +30,8 @@
                                     <table class="table table-striped" id="table-1">
                                         <thead>
                                             <tr>
-                                                <th class="text-center">#</th>
                                                 <th>Product</th>
+                                                <th>Total quantity</th>
                                                 <th>Type of Transaqtion</th>
                                                 <th>quantity of Transaqtion </th>
                                                 <th>Resoun</th>
@@ -57,54 +57,35 @@
             .then(response => response.json())
             .then(data => {
                 if (data && data.stock) {
-                    console.log(data.formatted_stock,
-                        'Formatted stock data');
+                    const stock = data.stock;
 
-                    fetch('http://127.0.0.1:8000/api/allProduct')
-                        .then(response => response.json())
-                        .then(productsData => {
-                            console.log(productsData, 'Product data');
+                    const stockTableBody = document.querySelector('#stockTable');
+                    stock.forEach(stockItem => {
+                        const productName = stockItem.product.name || 'Unknown Product';
+                        const productQuantity = stockItem.product.quantity || 'Unknown quantity';
 
-                            if (productsData && Array.isArray(productsData.product) && productsData.product.length >
-                                0) {
-                                const productsMap = {};
-                                productsData.product.forEach(product => {
-                                    productsMap[product.id] = product.name;
-                                });
+                        const row = `
+                    <tr>
+                         <td>${productName}</td>
+                        <td>${productQuantity}</td>
+                        <td>${stockItem.type}</td>
+                        <td>${stockItem.quantities}</td>
+                        <td>${stockItem.reason}</td>
+                        <td>${stockItem.description}</td>
+                        <td class="text-right">
+                            <a href="{{ route('edit.Track', ['id' => '']) }}/${stockItem.id}" class="btn btn-primary">Edit</a>
+                            <a href="#" class="btn btn-danger" onclick="confirmDelete(${stockItem.id})">Delete</a>
+                        </td>
+                    </tr>`;
+                        stockTableBody.innerHTML += row;
+                    });
 
-                                console.log(productsMap, 'Product map');
-
-                                const stockTableBody = document.querySelector('#stockTable');
-                                data.stock.forEach(stock => {
-                                    const productName = productsMap[stock.product_id] || 'Unknown Product';
-
-                                    const row = `
-                                    <tr>
-                                        <td>${stock.id}</td> 
-                                        <td>${productName}</td>
-                                        <td>${stock.type}</td>
-                                        <td>${stock.quantities}</td>
-                                         <td>${stock.reason}</td>
-                                         <td>${stock.description}</td>
-                                        <td class="text-right">
-                                    <a href="{{ route('edit.Track', ['id' => '']) }}/${stock.id}" class="btn btn-primary">Edit</a>
-                                    <a href="#" class="btn btn-danger" onclick="confirmDelete(${stock.id})">Delete</a>
-             
-                                            </td>
-                                    </tr>`;
-                                    stockTableBody.innerHTML += row;
-                                });
-
-                            } else {
-                                console.error('Products data is empty or not in expected format');
-                            }
-                        })
-                        .catch(error => console.error('Error fetching products:', error));
                 } else {
                     console.error('Error: stock data is missing or invalid');
                 }
             })
             .catch(error => console.error('Error fetching stock data:', error));
+
 
 
         function confirmDelete(stockId) {

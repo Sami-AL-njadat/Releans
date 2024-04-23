@@ -47,6 +47,7 @@
             </div>
         </section>
     </div>
+    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.min.js"></script>
 
     <script>
         fetch('http://127.0.0.1:8000/api/allProduct')

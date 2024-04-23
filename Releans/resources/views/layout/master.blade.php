@@ -7,6 +7,7 @@
     <title>Ecommerce Dashboard &mdash; Stisla</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ asset('frontend/assets/modules/izitoast/css/iziToast.min.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <link rel="stylesheet" href="{{ asset('frontend/assets/modules/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/assets/modules/fontawesome/css/all.min.css') }}">
