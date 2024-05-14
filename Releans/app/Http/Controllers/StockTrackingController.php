@@ -91,19 +91,18 @@ class StockTrackingController extends Controller
                 $updatedQuantity -= $request->quantities;
             }
 
-            // Check if type has changed and apply appropriate logic
-            // if (
-            //     $stock->type != $request->type &&
-            //     $stock->product_id != $request->product_id
-            // ) {
-            //     if ($request->type === 'addition') {
-            //         $originalQuantity += $stockOld;
-            //         $originalQuantity += $request->quantities;
-            //     } elseif ($request->type === 'deduction') {
-            //         $originalQuantity -= $stockOld;
-            //         $originalQuantity -= $request->quantities;
-            //     }
-            // }
+            if (
+                $stock->type != $request->type &&
+                $stock->product_id != $request->product_id
+            ) {
+                if ($request->type === 'addition') {
+                    $originalQuantity += $stockOld;
+                    $originalQuantity += $request->quantities;
+                } elseif ($request->type === 'deduction') {
+                    $originalQuantity -= $stockOld;
+                    $originalQuantity -= $request->quantities;
+                }
+            }
 
             $originalProduct->quantity = $originalQuantity;
             $newProduct->quantity = $updatedQuantity;
@@ -118,11 +117,9 @@ class StockTrackingController extends Controller
 
 
         if ($stock->product_id == $stock->product_id || $stock->type  == $stock->type || $stock->quantities == $stock->quantities) {
-            // Update the status of the original product
             $originalProduct->status = ($originalProduct->quantity > $originalProduct->minimum_level) ? 'in stock' : 'out of stock';
             $originalProduct->save();
 
-            // Update the status of the new product
             $newProduct->status = ($newProduct->quantity > $newProduct->minimum_level) ? 'in stock' : 'out of stock';
             $newProduct->save();
         }

@@ -35,11 +35,13 @@ class salesController extends Controller
                 $quantities = $sale->stock ? $sale->stock->quantities : 0;
 
                 return [
+                    'id' => $sale->id,
                     'user_name' => $userName,
                     'product_name' => $productName,
                     'product_price' => $productPrice,
                     'quantities' => $quantities,
                     'total_price' => $sale->total_price,
+                    'status' => $sale->status,
                 ];
             });
 

@@ -92,12 +92,20 @@
                                         throw new Error('Failed to update user role');
                                     }
                                     swal('Success', 'User role updated successfully',
-                                        'success');
+                                            'success')
+                                        .then(() => {
+                                            window.location.href =
+                                                'http://127.0.0.1:8000/allUser';
+                                        });
                                 })
                                 .catch(error => {
                                     console.error('Error:', error.message);
                                     swal('Error', 'Failed to update user role',
-                                        'error');
+                                            'error')
+                                        .then(() => {
+                                            window.location.href =
+                                                'http://127.0.0.1:8000/allUser';
+                                        });
                                 });
                         });
                     });

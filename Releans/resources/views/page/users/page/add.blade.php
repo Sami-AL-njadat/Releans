@@ -130,8 +130,7 @@
 
             console.log('UserData:', userData);
 
-            // Fetch API to send form data to the backend
-            fetch('http://127.0.0.1:8000/api/addUsers', {
+            fetch('http://127.0.0.1:8000/api/newUser', {
                     method: 'POST',
                     body: formData,
                     headers: {
@@ -145,29 +144,34 @@
                     return response.json();
                 })
                 .then(data => {
-
-                    Swal.fire({
-                        icon: "success",
-                        title: "User created successfully",
-                        showConfirmButton: false,
-                        timer: 12000
-                    });
-
-                    Swal.showLoading();
-                    setTimeout(() => {
-                        window.location.href = 'http://127.0.0.1:8000/';
-                    }, 2000);
+                    if (data.status === 422) {
+                        iziToast.error({
+                            title: 'Error',
+                            message: data.message,
+                            position: 'topRight'
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "success",
+                            title: "User created successfully",
+                            showConfirmButton: false,
+                            timer: 12000
+                        });
+                        Swal.showLoading();
+                        setTimeout(() => {
+                            window.location.href = 'http://127.0.0.1:8000/allUser';
+                        }, 2000);
+                    }
                 })
-
                 .catch(error => {
                     console.error('Error:', error);
-                    console.log('Error:', data);
                     iziToast.error({
                         title: 'Error',
                         message: 'Check what you entered.',
                         position: 'topRight'
                     })
                 });
+
         });
     </script>
 @endsection

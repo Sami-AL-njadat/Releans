@@ -32,10 +32,70 @@ class shopcontroller extends Controller
     }
 
 
+    // public function sale(Request $request, $id)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'quantity' => 'required|min:0|max:1000',
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return response()->json([
+    //             'status' => 422,
+    //             'errors' => $validator->errors()
+    //         ], 422);
+    //     }
+
+    //     $user = Auth::user();
+    //     $saleQuant = $request->quantity;
+
+    //     $product = Product::findOrFail($id);
+
+    //     if ($saleQuant > $product->quantity) {
+    //         return response()->json([
+    //             'status' => 420,
+    //             'message' => 'Sale quantity exceeds available quantity'
+    //         ], 420);
+    //     }
+
+
+
+
+    //     $stock = new StockTracking();
+    //     $stock->product_id = $id;
+    //     $stock->type = 'deduction';
+    //     $stock->quantities = $saleQuant;
+    //     $stock->reason = 'transaction sale';
+    //     $stock->description = 'Order placed by user: ' . $user->name;
+    //     $stock->save();
+
+    //     $sale = new Sales();
+    //     $sale->user_id = $user->id;
+    //     $sale->product_id = $id;
+    //     $sale->trans_id = $stock->id;
+    //     $sale->total_price = $saleQuant * $product->price;
+    //     $sale->save();
+
+    //     $product->quantity -= $saleQuant;
+    //     $product->status = ($product->quantity >= $product->minimum_level) ? 'in stock' : 'out of stock';
+    //     $product->save();
+
+
+    //     $inventory = Inventory::where('product_id', $product->id)->firstOrNew();
+    //     $inventory->status = ($product->quantity > $product->minimum_level) ? 'good' : 'low';
+    //     $inventory->save();
+
+    //     return response()->json([
+    //         'status' => 200,
+    //         'message' => 'Sale added successfully',
+    //         'data' => $sale
+    //     ]);
+    // }
+
+
     public function sale(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'quantity' => 'required|min:0|max:1000',
+            'quantity' => 'required|min:1|max:12000|integer',
         ]);
 
         if ($validator->fails()) {
@@ -49,14 +109,13 @@ class shopcontroller extends Controller
         $saleQuant = $request->quantity;
 
         $product = Product::findOrFail($id);
-
+        $priceProduct = $product->price;
         if ($saleQuant > $product->quantity) {
             return response()->json([
                 'status' => 420,
                 'message' => 'Sale quantity exceeds available quantity'
             ], 420);
         }
-
 
 
 
@@ -71,18 +130,10 @@ class shopcontroller extends Controller
         $sale = new Sales();
         $sale->user_id = $user->id;
         $sale->product_id = $id;
-        $sale->trans_id = $stock->id;
-        $sale->total_price = $saleQuant * $product->price;
+        $sale->trans_id  = $stock->id;
+        $sale->status = 'on hold';
+        $sale->total_price =  $saleQuant * $priceProduct;
         $sale->save();
-
-        $product->quantity -= $saleQuant;
-        $product->status = ($product->quantity >= $product->minimum_level) ? 'in stock' : 'out of stock';
-        $product->save();
-
-
-        $inventory = Inventory::where('product_id', $product->id)->firstOrNew();
-        $inventory->status = ($product->quantity > $product->minimum_level) ? 'good' : 'low';
-        $inventory->save();
 
         return response()->json([
             'status' => 200,
@@ -91,6 +142,94 @@ class shopcontroller extends Controller
         ]);
     }
 
+    // public function updateSaleStatus(Request $request, $saleId)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'status' => 'required|in:accept,reject',
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return response()->json([
+    //             'status' => 422,
+    //             'errors' => $validator->errors()
+    //         ], 422);
+    //     }
+
+    //     $sale = Sales::findOrFail($saleId);
+    //     $stock = StockTracking::findOrFail($sale->trans_id);
+
+    //     $sale->status = $request->status;
+
+    //     if ($request->status === 'accept') {
+
+    //         $product = Product::findOrFail($sale->product_id);
+    //         $product->quantity -= $stock->quantities;
+    //         $product->status = ($product->quantity >= $product->minimum_level) ? 'in stock' : 'out of stock';
+    //         $product->save();
+    //     } elseif ($request->status === 'reject') {
+    //         $product = Product::findOrFail($sale->product_id);
+
+    //         $stock = StockTracking::findOrFail($sale->trans_id);
+
+    //         $stock->delete();
+    //     }
+
+    //     $sale->save();
+    //     $inventory = Inventory::where('product_id', $product->id)->firstOrNew();
+
+    //     $inventory->status = ($product->quantity > $product->minimum_level) ? 'good' : 'low';
+    //     $inventory->save();
+    //     return response()->json([
+    //         'status' => 200,
+    //         'message' => 'Sale status updated successfully',
+    //         'data' => $sale
+    //     ]);
+    // }
+
+    public function updateSaleStatus(Request $request, $saleId)
+    {
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|in:accept,reject',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $sale = Sales::findOrFail($saleId);
+        $stock = StockTracking::findOrFail($sale->trans_id);
+
+        $sale->status = $request->status;
+
+        $product = Product::findOrFail($sale->product_id);
+
+        if ($request->status === 'accept') {
+            $product->quantity -= $stock->quantities;
+            $product->status = ($product->quantity >= $product->minimum_level) ? 'in stock' : 'out of stock';
+            $product->save();
+        } elseif ($request->status === 'reject') {
+            $stock->reason = 'cancellation';
+            $stock->description = 'THis order cancelled';
+
+            $sale->status = 'reject';
+            $stock->save();
+        }
+
+        $sale->save();
+
+        $inventory = Inventory::where('product_id', $product->id)->firstOrNew();
+        $inventory->status = ($product->quantity > $product->minimum_level) ? 'good' : 'low';
+        $inventory->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Sale status updated successfully',
+            'data' => $sale
+        ]);
+    }
 
 
 

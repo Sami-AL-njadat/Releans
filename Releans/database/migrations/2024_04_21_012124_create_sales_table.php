@@ -19,7 +19,10 @@ return new class extends Migration
             $table->decimal('total_price', 8, 2)->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('trans_id')->references('id')->on('stock_trackings')->onDelete('cascade')->onUpdate('cascade');
+            // $table->foreign('trans_id')->references('id')->on('stock_trackings')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('trans_id')->references('id')->on('stock_trackings')->onUpdate('cascade');
+            $table->enum('status', ['on hold', 'accept', 'reject'])->default('on hold')->nullable();
+
             $table->timestamps();
         });
     }

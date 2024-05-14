@@ -85,7 +85,7 @@
                             </h5>               
 
  
- <img style="hight:110px; width:200px ;border-radius:50%" src="${product.image}" class="img-fluid" alt="Product Image">
+ <img style=" hight"110px !important; width:200px !important" src="${product.image}" class="img-fluid" alt="Product Image">
                          <h6  class="card-text mt-4">Price: ${product.price}</h6>
                          <h6  class="card-text ">Avilabel quantity: ${product.quantity}</h6>
                         <h6 class="card-text">Description: ${product.description}</h6>
@@ -122,14 +122,14 @@
                     console.log('Success:', data);
                     Swal.fire({
                         icon: "success",
-                        title: "Order has been pleced successfully",
+                        title: "Order has been placed successfully,!!Wait for Accept please!!",
                         showConfirmButton: false,
                         timer: 4000
                     });
 
                     Swal.showLoading();
                     setTimeout(() => {
-                        window.location.href = `http://127.0.0.1:8000/selectProduct?id=/${productId}`;
+                        window.location.href = `http://127.0.0.1:8000/shop`;
                     }, 2000);
                 })
                 .catch(error => {
@@ -143,7 +143,7 @@
 
                     Swal.showLoading();
                     setTimeout(() => {
-                        window.location.href = `http://127.0.0.1:8000/selectProduct?id=/${productId}`;
+                        window.location.href = `http://127.0.0.1:8000/shop`;
                     }, 2000);
                 });
         });

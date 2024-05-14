@@ -38,6 +38,7 @@ Route::middleware(['auth:sanctum', 'check.role:admin,manager'])->group(function 
     Route::get('/productAdd', [ProductController::class, 'addProdcut'])->name('add.product');
     Route::get('/productEdit', [ProductController::class, 'editProdcut'])->name('edit.product');
     Route::get('/stock', [StockTrackingController::class, 'index'])->name('stock.page');
+    route::get('/sale', [salesController::class, 'index'])->name('sale.page');
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
@@ -54,6 +55,3 @@ route::get('/signupPage', [authController::class, 'signup'])->name('signup.page'
 
 route::get('/addUsers', [UsersController::class, 'add'])->name('add.page');
 route::get('/ProfileUsers', [UsersController::class, 'store'])->name('Profile.page');
-
-
-route::get('/sale', [salesController::class, 'index'])->name('sale.page');

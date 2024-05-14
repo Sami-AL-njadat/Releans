@@ -35,7 +35,7 @@ class UsersController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
             'phone' => 'required|digits:10',
-            'role' => 'required|in:admin,user,manager', // Validate role against predefined options
+            'role' => 'required|in:admin,user,manager',
         ]);
 
         if ($validator->fails()) {

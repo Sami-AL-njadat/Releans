@@ -35,9 +35,9 @@ Route::middleware(['auth:sanctum', 'check.role:admin'])->group(function () {
     Route::post('editTrans/{id}', [StockTrackingController::class, 'update']);
     Route::delete('deleteStock/{id?}', [StockTrackingController::class, 'delete']);
     Route::delete('user/delete/{id?}', [UsersController::class, 'delete']);
+    Route::post('newUser', [UsersController::class, 'create']);
     Route::post('user/{id}/role', [UsersController::class, 'updateRole']);
     Route::get('allSale', [salesController::class, 'show']);
-
 });
 
 
@@ -75,6 +75,7 @@ Route::middleware(['auth:sanctum', 'check.role:admin,manager'])->group(function 
     Route::get('inventoryReport', [shopcontroller::class, 'generateInventoryReport'])->name('inventory.pdf');
     Route::get('popularReport', [shopcontroller::class, 'generatePopularReport'])->name('popular.pdf');
 
+    Route::post('updateSale/{id?}', [shopcontroller::class, 'updateSaleStatus']);
 
 
     Route::get('notifications', [InventoryController::class, 'notify']);

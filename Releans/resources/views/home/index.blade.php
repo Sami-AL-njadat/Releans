@@ -2,6 +2,10 @@
 
 @section('content')
     <div class="loader">
+        <div class="loader-circle"></div>
+        <div class="loader-img">
+            <img src="{{ asset('front_end/img/core-img/pls.jpeg') }}" alt="" />
+        </div>
 
     </div>
 

@@ -65,7 +65,7 @@
                                             <div class="form-group col-md-4">
                                                 <label>Price</label>
                                                 <input name="price" type="number" min="0" max="1000"
-                                                    step="1" class="form-control" required>
+                                                    step="0.001" class="form-control" required>
 
                                             </div>
                                         </div>
